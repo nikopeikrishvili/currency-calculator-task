@@ -2,6 +2,6 @@
 
 namespace App\Services\Transaction;
 
-class WithDraw extends TransactionAbstract
+class Withdraw extends TransactionAbstract
 {
 }

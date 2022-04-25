@@ -3,6 +3,7 @@
 namespace App\Services\Transactions;
 
 use App\Services\Transaction\TransactionInterface;
+use Exception;
 use Iterator;
 
 /**
@@ -15,6 +16,7 @@ class TransactionList implements TransactionListInterface, Iterator
      */
     private array $list = [];
     private int $position = 0;
+
     public function __construct()
     {
         $this->position = 0;
@@ -44,6 +46,7 @@ class TransactionList implements TransactionListInterface, Iterator
     {
         $this->position = 0;
     }
+
     /**
      * @inheritDoc
      */
@@ -57,5 +60,19 @@ class TransactionList implements TransactionListInterface, Iterator
      */
     public function addFromCsvLine(array $csvLine): void
     {
+        $transactionType = $csvLine['3'];
+        $className = '\App\Services\Transaction\\' . ucfirst($transactionType);
+        if (!class_exists($className)) {
+            throw new Exception("Invalid transaction type");
+        }
+        $transaction = new $className(
+            $csvLine['0'],
+            $csvLine['1'],
+            $csvLine['2'],
+            $csvLine['3'],
+            $csvLine['4'],
+            $csvLine['5']
+        );
+        $this->list[] = $transaction;
     }
 }
