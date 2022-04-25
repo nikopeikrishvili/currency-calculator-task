@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\Rates\Rates;
+use App\Services\Rates\RatesInterface;
 use App\Services\Transactions\TransactionList;
 use App\Services\Transactions\TransactionListInterface;
 use Illuminate\Support\ServiceProvider;
@@ -14,6 +16,14 @@ class AppServiceProvider extends ServiceProvider
     public array $bindings = [
         TransactionListInterface::class => TransactionList::class,
     ];
+
+    /**
+     * @var array|string[]
+     */
+    public array $singletons = [
+        RatesInterface::class => Rates::class
+    ];
+
     /**
      * Register any application services.
      *
