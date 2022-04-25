@@ -2,6 +2,6 @@
 
 namespace App\Services\Commissions;
 
-class Calculator
+final class Calculator
 {
 }

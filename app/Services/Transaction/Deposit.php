@@ -2,6 +2,6 @@
 
 namespace App\Services\Transaction;
 
-class Deposit extends TransactionAbstract
+final class Deposit extends TransactionAbstract
 {
 }

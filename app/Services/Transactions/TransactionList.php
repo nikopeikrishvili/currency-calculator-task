@@ -9,7 +9,7 @@ use Iterator;
 /**
  * @implements Iterator<TransactionInterface>
  */
-class TransactionList implements TransactionListInterface, Iterator
+final class TransactionList implements TransactionListInterface, Iterator
 {
     /**
      * @var array<TransactionInterface>
