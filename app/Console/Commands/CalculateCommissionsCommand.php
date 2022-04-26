@@ -40,7 +40,7 @@ class CalculateCommissionsCommand extends Command
             $calculator->calculate($transactionList);
             foreach ($transactionList as $transaction) {
                 $scale = $currencyConfigurator->getScaleForCurrency($transaction->getCurrency());
-                echo sprintf('%.' . $scale . 'f', $transaction->getCommission()) . "\n";
+                $this->line(sprintf('%.' . $scale . 'f', $transaction->getCommission()));
             }
         } catch (\Throwable $exception) {
             $this->error('Exception ' . $exception->getMessage());
@@ -56,7 +56,7 @@ class CalculateCommissionsCommand extends Command
     {
         $file = $this->argument('file');
         if (!file_exists($file)) {
-            $this->error('File ' . $file . ' not found');
+            $this->error('File ' . $file . ' not found ' . __DIR__);
             return false;
         }
         return true;
