@@ -2,6 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Services\Commissions\CommissionCalculatorInterface;
+use App\Services\Currency\CurrencyConfiguratorInterface;
+use App\Services\Transactions\TransactionList;
 use App\Services\Transactions\TransactionListInterface;
 use Illuminate\Console\Command;
 
@@ -11,8 +14,17 @@ class CalculateCommissionsCommand extends Command
 
     protected $description = 'Calculate Commissions from input CSV file';
 
-    public function handle(TransactionListInterface $transactionList): int
-    {
+    /**
+     * @param TransactionList $transactionList
+     * @param CommissionCalculatorInterface $calculator
+     * @param CurrencyConfiguratorInterface $currencyConfigurator
+     * @return int
+     */
+    public function handle(
+        TransactionListInterface $transactionList,
+        CommissionCalculatorInterface $calculator,
+        CurrencyConfiguratorInterface $currencyConfigurator
+    ): int {
         if (!$this->validateArgument()) {
             return -1;
         }
@@ -22,10 +34,14 @@ class CalculateCommissionsCommand extends Command
                 while (($data = fgetcsv($open, 1000, ",")) !== false) {
                     $transactionList->addFromCsvLine($data);
                 }
-
                 fclose($open);
             }
-            dump($transactionList);
+
+            $calculator->calculate($transactionList);
+            foreach ($transactionList as $transaction) {
+                $scale = $currencyConfigurator->getScaleForCurrency($transaction->getCurrency());
+                echo sprintf('%.' . $scale . 'f', $transaction->getCommission()) . "\n";
+            }
         } catch (\Throwable $exception) {
             $this->error('Exception ' . $exception->getMessage());
             if (isset($open) && is_resource($open)) {
