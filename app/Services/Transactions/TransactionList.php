@@ -27,9 +27,9 @@ final class TransactionList implements TransactionListInterface, Iterator
         return $this->list[$this->position];
     }
 
-    public function next(): int
+    public function next(): void
     {
-        return ++$this->position;
+        ++$this->position;
     }
 
     public function key(): int
@@ -42,7 +42,7 @@ final class TransactionList implements TransactionListInterface, Iterator
         return isset($this->list[$this->position]);
     }
 
-    public function rewind()
+    public function rewind(): void
     {
         $this->position = 0;
     }
