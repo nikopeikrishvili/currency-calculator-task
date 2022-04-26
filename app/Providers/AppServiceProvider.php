@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Services\Commissions\CommissionCalculator;
+use App\Services\Commissions\CommissionCalculatorInterface;
+use App\Services\Currency\CurrencyConfigurator;
+use App\Services\Currency\CurrencyConfiguratorInterface;
 use App\Services\Rates\Rates;
 use App\Services\Rates\RatesInterface;
 use App\Services\Transactions\TransactionList;
@@ -15,13 +19,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public array $bindings = [
         TransactionListInterface::class => TransactionList::class,
+        CommissionCalculatorInterface::class => CommissionCalculator::class,
     ];
 
     /**
      * @var array|string[]
      */
     public array $singletons = [
-        RatesInterface::class => Rates::class
+        RatesInterface::class => Rates::class,
+        CurrencyConfiguratorInterface::class => CurrencyConfigurator::class,
+
     ];
 
     /**
